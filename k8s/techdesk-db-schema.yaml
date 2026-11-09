@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: techdesk-db-schema
+  namespace: techdesk
+  labels:
+    app: techdesk-db
+    app.kubernetes.io/part-of: business-builds
+data:
+  schema.sql: |
+    -- TechDesk schema — IT services helpdesk (demo)
+    CREATE TABLE IF NOT EXISTS clients (
+        id SERIAL PRIMARY KEY,
+        company_name TEXT NOT NULL,
+        contact_name TEXT,
+        email TEXT,
+        phone TEXT,
+        plan TEXT DEFAULT 'standard',
+        since DATE
+    );
+
+    CREATE TABLE IF NOT EXISTS technicians (
+        id SERIAL PRIMARY KEY,
+        full_name TEXT NOT NULL,
+        email TEXT,
+        phone TEXT,
+        specialty TEXT,
+        active BOOLEAN DEFAULT TRUE
+    );
+
+    CREATE TABLE IF NOT EXISTS tickets (
+        id SERIAL PRIMARY KEY,
+        client_id INTEGER NOT NULL REFERENCES clients(id),
+        technician_id INTEGER REFERENCES technicians(id),
+        subject TEXT NOT NULL,
+        description TEXT,
+        priority TEXT DEFAULT 'medium',
+        status TEXT DEFAULT 'open',
+        created_at TIMESTAMP DEFAULT now(),
+        resolved_at TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS ticket_updates (
+        id SERIAL PRIMARY KEY,
+        ticket_id INTEGER NOT NULL REFERENCES tickets(id),
+        author TEXT,
+        update_text TEXT,
+        created_at TIMESTAMP DEFAULT now()
+    );
+
+    CREATE TABLE IF NOT EXISTS assets (
+        id SERIAL PRIMARY KEY,
+        client_id INTEGER NOT NULL REFERENCES clients(id),
+        asset_tag TEXT,
+        device_type TEXT,
+        model TEXT,
+        serial_number TEXT,
+        assigned_to TEXT
+    );

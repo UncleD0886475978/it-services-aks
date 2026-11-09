@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: techdesk-db
+  namespace: techdesk
+  labels:
+    app: techdesk-db
+    app.kubernetes.io/part-of: business-builds
+spec:
+  serviceName: techdesk-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: techdesk-db
+  template:
+    metadata:
+      labels:
+        app: techdesk-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - name: postgres
+              containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: techdesk
+            - name: POSTGRES_DB
+              value: techdesk
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: techdesk-db-secret
+                  key: POSTGRES_PASSWORD
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+            - name: schema
+              mountPath: /docker-entrypoint-initdb.d/01-schema.sql
+              subPath: schema.sql
+              readOnly: true
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "techdesk", "-d", "techdesk"]
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: techdesk-db-data
+        - name: schema
+          configMap:
+            name: techdesk-db-schema

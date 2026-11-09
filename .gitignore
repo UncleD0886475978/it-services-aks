@@ -1,0 +1,30 @@
+# Local Kubernetes / cloud credentials — never commit these
+kubeconfig
+kubeconfig.*
+.kube/
+*.kubeconfig
+
+# Environment overrides / secrets
+.env
+.env.*
+!.env.example
+techdesk-db-secret.yaml
+
+# Terraform (later tracks)
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+*.tfplan
+
+# OS / editor noise
+.DS_Store
+.idea/
+.vscode/
+*.swp

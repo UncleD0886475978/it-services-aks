@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: techdesk
+  labels:
+    app.kubernetes.io/name: techdesk
+    app.kubernetes.io/part-of: business-builds

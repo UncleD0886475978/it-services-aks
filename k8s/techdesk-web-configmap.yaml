@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: techdesk-web-page
+  namespace: techdesk
+  labels:
+    app: techdesk-web
+    app.kubernetes.io/part-of: business-builds
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TechDesk — IT Helpdesk Dashboard</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: #f4f6f8; color: #1c2733; }
+      header { background: linear-gradient(135deg, #2563eb, #123); color: #fff; padding: 28px 20px; }
+      header h1 { margin: 0 0 6px; font-size: 28px; }
+      header p { margin: 0; opacity: .85; }
+      main { max-width: 960px; margin: 0 auto; padding: 20px; }
+      .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin: 18px 0; }
+      .card { background: #fff; border-radius: 10px; padding: 18px; box-shadow: 0 1px 4px rgba(0,0,0,.08); text-align: center; }
+      .card .num { font-size: 32px; font-weight: 700; color: #2563eb; }
+      .card .label { color: #5a6b7a; margin-top: 4px; }
+      table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+      th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e6ebef; }
+      th { background: #2563eb; color: #fff; }
+      footer { max-width: 960px; margin: 0 auto; padding: 0 20px 28px; color: #5a6b7a; font-size: 14px; }
+    </style>
+    </head>
+    <body>
+    <header>
+      <h1>TechDesk — IT Helpdesk Dashboard</h1>
+      <p>Helpdesk for a small managed IT services provider — tickets, clients, technicians and assets at a glance.</p>
+    </header>
+    <main>
+      <section class="cards">
+          <div class="card"><div class="num">23</div><div class="label">Open tickets</div></div>
+          <div class="card"><div class="num">2</div><div class="label">Critical</div></div>
+          <div class="card"><div class="num">11</div><div class="label">Resolved today</div></div>
+          <div class="card"><div class="num">18</div><div class="label">Active clients</div></div>
+      </section>
+      <h2>Recent tickets (sample)</h2>
+      <p><em>Sample data — fictional, for demonstration only.</em></p>
+      <table>
+        <thead><tr><th>Ticket</th><th>Client</th><th>Subject</th><th>Priority</th><th>Status</th></tr></thead>
+        <tbody>
+            <tr><td>#1042</td><td>Bright Dental</td><td>Printer offline in reception</td><td>Medium</td><td>In progress</td></tr>
+            <tr><td>#1041</td><td>Harbor Legal</td><td>VPN drops for remote staff</td><td>High</td><td>Open</td></tr>
+            <tr><td>#1039</td><td>City Bakery Co.</td><td>POS terminal will not boot</td><td>Critical</td><td>In progress</td></tr>
+            <tr><td>#1037</td><td>North Gym</td><td>New starter laptop setup</td><td>Low</td><td>Resolved</td></tr>
+        </tbody>
+      </table>
+    </main>
+    <footer>Demo dashboard — static page served from a Kubernetes ConfigMap</footer>
+    </body>
+    </html>
